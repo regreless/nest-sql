@@ -1,0 +1,44 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 学生：学号唯一，姓名允许重复。
+model Student {
+  id          Int          @id @default(autoincrement())
+  studentNo   String       @unique
+  name        String
+  enrollments Enrollment[]
+
+  @@map("student")
+}
+
+// 课程：课程编号唯一，名称允许重复。
+model Course {
+  id          Int          @id @default(autoincrement())
+  code        String       @unique
+  name        String
+  enrollments Enrollment[]
+
+  @@map("course")
+}
+
+// 一条记录表示一名学生选择一门课程。
+model Enrollment {
+  studentId  Int
+  courseId   Int
+  enrolledAt DateTime @default(now())
+  student    Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  // 联合主键：同一学生不能重复选择同一课程。
+  @@id([studentId, courseId])
+  // 加速按课程查询选课学生；按学生查询可使用联合主键索引。
+  @@index([courseId])
+  @@map("enrollment")
+}

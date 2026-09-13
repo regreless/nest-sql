@@ -1,0 +1,159 @@
+{
+  "info": {
+    "name": "nest-sql 学生选课验证",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "在 Hoppscotch 选择从 Postman 导入。使用扩展拦截器，按编号发送；第 05 步选摄影，第 09 步退课恢复。地址和 ID 对应当前本地 seed 数据，若数据库重建，请先查看 01、02 并调整请求。"
+  },
+  "item": [
+    {
+      "name": "01 学生列表",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/student",
+        "description": "200；找到 S001 小明，当前 ID 为 1。"
+      }
+    },
+    {
+      "name": "02 课程列表",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/course",
+        "description": "200；影视 C001 当前 ID 为 1，摄影 C010 当前 ID 为 10。"
+      }
+    },
+    {
+      "name": "03 小明已选课程",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "200；初始 total=3，课程为影视、数学、英语。"
+      }
+    },
+    {
+      "name": "04 影视课学生",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/course/1/students",
+        "description": "200；total=5。"
+      }
+    },
+    {
+      "name": "05 小明选择摄影",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "201；增加一条选课记录。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"courseId\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "06 重复选择摄影",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "409；不得新增重复记录。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"courseId\": 10\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "07 小明选课后查询",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "200；total=4，包含摄影。"
+      }
+    },
+    {
+      "name": "08 摄影课学生",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/course/10/students",
+        "description": "200；total=1，包含小明。"
+      }
+    },
+    {
+      "name": "09 小明退选摄影",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "http://localhost:3000/student/1/courses/10",
+        "description": "204；无响应体。"
+      }
+    },
+    {
+      "name": "10 退课后查询",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "200；total 恢复为 3。"
+      }
+    },
+    {
+      "name": "11 非法选课参数",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:3000/student/1/courses",
+        "description": "400；courseId 必须为数字整数。",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"courseId\": \"invalid\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "12 不存在的学生",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "http://localhost:3000/student/2147483647/courses",
+        "description": "404。"
+      }
+    }
+  ]
+}
