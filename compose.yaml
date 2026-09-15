@@ -1,0 +1,24 @@
+services:
+  postgres:
+    build: ./docker/postgres
+    image: local/postgres_vector:18.6-0.8.6
+    container_name: postgres18
+    restart: unless-stopped
+    env_file:
+      - path: .env.local
+        format: raw
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
+    external: true
+    name: postgres18_data
