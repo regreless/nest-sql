@@ -7,7 +7,7 @@ export const config = {
     chatModel: 'qwen3.5:0.8b',
 
     // embedModel 是用于向量化的模型名称
-    embedModel: 'tmxbai-embed-large:latest',
+    embedModel: 'mxbai-embed-large:latest',
 
     // 生成文本的随机程度，值越大越随机，值越小越稳定
     temperature: 0.3,
