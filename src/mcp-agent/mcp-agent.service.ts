@@ -43,7 +43,6 @@ export class McpAgentService implements OnModuleInit, OnModuleDestroy {
         })
         // 把所有mcp server的工具转成统一的格式（langchain tools的格式），存储在 mcpTools 变量中，方便后续调用
         this.mcpTools = await this.mcpClient.getTools()
-        console.log('MCP Agent Service initialized with tools:', this.mcpTools)
     }
 
     // Agenet执行逻辑

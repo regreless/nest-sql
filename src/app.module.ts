@@ -16,6 +16,9 @@ import { RagDbModule } from './rag-db/rag-db.module'
 import { McpClientModule } from './mcp-client/mcp-client.module'
 import { McpAgentModule } from './mcp-agent/mcp-agent.module'
 import { EmbedModule } from './embed/embed.module';
+import { LanggraphModule } from './langgraph/langgraph.module';
+import { ArticleModule } from './article/article.module';
+import { TechResearchModule } from './tech-research/tech-research.module';
 
 @Module({
     imports: [
@@ -29,7 +32,10 @@ import { EmbedModule } from './embed/embed.module';
         RagDbModule,
         McpClientModule,
         McpAgentModule,
-        EmbedModule
+        EmbedModule,
+        LanggraphModule,
+        ArticleModule,
+        TechResearchModule
     ],
     controllers: [AppController, ChainsController],
     providers: [
